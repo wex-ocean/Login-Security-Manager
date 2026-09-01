@@ -39,6 +39,11 @@ class LSM_Login_Guard {
 		$ip        = LSM_IP_Utils::get_visitor_ip();
 		$user_agent = isset( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ) : '';
 
+		// Check if this IP is whitelisted for admin bypass.
+		if ( self::is_admin_bypass_ip( $ip ) ) {
+			return;
+		}
+
 		// Insert attempt into database.
 		self::insert_attempt( $ip, $username, $user_agent );
 
@@ -46,6 +51,23 @@ class LSM_Login_Guard {
 		if ( self::check_lockout_threshold( $ip ) ) {
 			LSM_Lockout::create_lockout( $ip, 'failed_attempts' );
 		}
+	}
+
+	/**
+	 * Check if an IP is configured as an admin bypass IP.
+	 *
+	 * @param string $ip The IP to check.
+	 * @return bool True if this IP should bypass lockout checks, false otherwise.
+	 */
+	private static function is_admin_bypass_ip( $ip ) {
+		$settings = get_option( 'lsm_settings', array() );
+		$admin_bypass_ip = isset( $settings['admin_bypass_ip'] ) ? $settings['admin_bypass_ip'] : '';
+
+		if ( empty( $admin_bypass_ip ) ) {
+			return false;
+		}
+
+		return $ip === $admin_bypass_ip;
 	}
 
 	/**

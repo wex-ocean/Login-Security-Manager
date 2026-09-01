@@ -40,6 +40,11 @@ class LSM_Lockout {
 	public static function block_locked_out_users( $user, $username, $password ) {
 		$ip = LSM_IP_Utils::get_visitor_ip();
 
+		// Check if this IP is whitelisted for admin bypass.
+		if ( self::is_admin_bypass_ip( $ip ) ) {
+			return $user;
+		}
+
 		if ( self::is_locked_out( $ip ) ) {
 			return new WP_Error(
 				'lsm_ip_locked_out',
@@ -48,6 +53,23 @@ class LSM_Lockout {
 		}
 
 		return $user;
+	}
+
+	/**
+	 * Check if an IP is configured as an admin bypass IP.
+	 *
+	 * @param string $ip The IP to check.
+	 * @return bool True if this IP should bypass lockout checks, false otherwise.
+	 */
+	private static function is_admin_bypass_ip( $ip ) {
+		$settings = get_option( 'lsm_settings', array() );
+		$admin_bypass_ip = isset( $settings['admin_bypass_ip'] ) ? $settings['admin_bypass_ip'] : '';
+
+		if ( empty( $admin_bypass_ip ) ) {
+			return false;
+		}
+
+		return $ip === $admin_bypass_ip;
 	}
 
 	/**

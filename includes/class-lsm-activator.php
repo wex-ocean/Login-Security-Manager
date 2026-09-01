@@ -90,6 +90,7 @@ class LSM_Activator {
 				'log_retention'      => 30, // days
 				'behind_proxy'       => false,
 				'trusted_proxy_ips'  => array(),
+				'admin_bypass_ip'    => '',
 				'enable_enumeration_guard' => true,
 				'max_sessions'       => 0, // 0 = unlimited
 			);

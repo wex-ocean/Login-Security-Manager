@@ -60,6 +60,9 @@ class LSM_Core {
 	 * - IP utilities for visitor IP detection
 	 * - Login guard for failed attempt tracking
 	 * - Lockout handler for IP blocking
+	 * - Error messages for generic login errors
+	 * - Settings registration and sanitization
+	 * - Admin menu and pages
 	 *
 	 * @return void
 	 */
@@ -67,6 +70,9 @@ class LSM_Core {
 		require_once LSM_PLUGIN_DIR . 'includes/class-lsm-ip-utils.php';
 		require_once LSM_PLUGIN_DIR . 'includes/class-lsm-login-guard.php';
 		require_once LSM_PLUGIN_DIR . 'includes/class-lsm-lockout.php';
+		require_once LSM_PLUGIN_DIR . 'includes/class-lsm-error-messages.php';
+		require_once LSM_PLUGIN_DIR . 'includes/class-lsm-settings.php';
+		require_once LSM_PLUGIN_DIR . 'includes/class-lsm-admin.php';
 	}
 
 	/**
@@ -75,11 +81,20 @@ class LSM_Core {
 	 * @return void
 	 */
 	public function run() {
+		// Initialize settings registration (must be before other inits).
+		LSM_Settings::init();
+
+		// Initialize generic error messages.
+		LSM_Error_Messages::init();
+
 		// Initialize login guard (tracks failed attempts).
 		LSM_Login_Guard::init();
 
 		// Initialize lockout handler (blocks locked-out IPs).
 		LSM_Lockout::init();
+
+		// Initialize admin menu and pages.
+		LSM_Admin::init();
 	}
 
 	/**
