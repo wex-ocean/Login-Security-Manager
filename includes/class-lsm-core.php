@@ -62,6 +62,7 @@ class LSM_Core {
 	 * - Lockout handler for IP blocking
 	 * - Error messages for generic login errors
 	 * - Settings registration and sanitization
+	 * - Logger with query helpers for stats
 	 * - Admin menu and pages
 	 *
 	 * @return void
@@ -72,6 +73,7 @@ class LSM_Core {
 		require_once LSM_PLUGIN_DIR . 'includes/class-lsm-lockout.php';
 		require_once LSM_PLUGIN_DIR . 'includes/class-lsm-error-messages.php';
 		require_once LSM_PLUGIN_DIR . 'includes/class-lsm-settings.php';
+		require_once LSM_PLUGIN_DIR . 'includes/class-lsm-logger.php';
 		require_once LSM_PLUGIN_DIR . 'includes/class-lsm-admin.php';
 	}
 
