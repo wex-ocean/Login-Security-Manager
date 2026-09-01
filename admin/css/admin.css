@@ -1,0 +1,22 @@
+/**
+ * Admin styles for Login Security Manager.
+ *
+ * @package LoginSecurityManager
+ */
+
+.lsm-dashboard,
+.lsm-blocked-ips,
+.lsm-logs {
+	margin-top: 20px;
+}
+
+.lsm-dashboard h2,
+.lsm-blocked-ips h2,
+.lsm-logs h2 {
+	margin-top: 30px;
+	margin-bottom: 15px;
+	border-bottom: 1px solid #ddd;
+	padding-bottom: 10px;
+}
+
+/* Placeholder for additional admin styles */

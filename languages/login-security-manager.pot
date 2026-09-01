@@ -1,0 +1,45 @@
+# Copyright (C) 2026 Login Security Manager
+# This file is distributed under the same license as the Login Security Manager package.
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: \n"
+"Project-Id-Version: Login Security Manager 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-01 00:00:00+0000\n"
+
+#: login-security-manager.php:24
+msgid "Login Security Manager"
+msgstr ""
+
+#: login-security-manager.php:25
+msgid "Comprehensive login security suite with failed attempt tracking, IP lockouts, and brute force protection."
+msgstr ""
+
+#: admin/views/dashboard.php:13
+msgid "Login Security Manager - Dashboard"
+msgstr ""
+
+#: admin/views/dashboard.php:16
+msgid "Dashboard features coming in Phase 2"
+msgstr ""
+
+#: admin/views/settings.php:13
+msgid "Login Security Manager - Settings"
+msgstr ""
+
+#: admin/views/blocked-ips.php:13
+msgid "Login Security Manager - Blocked IPs"
+msgstr ""
+
+#: admin/views/blocked-ips.php:16
+msgid "Blocked IPs management coming in Phase 2"
+msgstr ""
+
+#: admin/views/logs.php:13
+msgid "Login Security Manager - Logs"
+msgstr ""
+
+#: admin/views/logs.php:16
+msgid "Activity logs display coming in Phase 2"
+msgstr ""
