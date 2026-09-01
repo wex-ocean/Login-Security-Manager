@@ -57,12 +57,16 @@ class LSM_Core {
 	 * Load the required dependencies for this plugin.
 	 *
 	 * Includes the following files:
-	 * - A simple loader class to handle conditional hook registration
+	 * - IP utilities for visitor IP detection
+	 * - Login guard for failed attempt tracking
+	 * - Lockout handler for IP blocking
 	 *
 	 * @return void
 	 */
 	private function load_dependencies() {
-		// For now, we'll expand this to include individual feature classes in Phase 1+.
+		require_once LSM_PLUGIN_DIR . 'includes/class-lsm-ip-utils.php';
+		require_once LSM_PLUGIN_DIR . 'includes/class-lsm-login-guard.php';
+		require_once LSM_PLUGIN_DIR . 'includes/class-lsm-lockout.php';
 	}
 
 	/**
@@ -71,8 +75,11 @@ class LSM_Core {
 	 * @return void
 	 */
 	public function run() {
-		// Future: Initialize feature classes and register hooks.
-		// For Phase 1 MVP, we'll add login guard, IP lockout, and error message override.
+		// Initialize login guard (tracks failed attempts).
+		LSM_Login_Guard::init();
+
+		// Initialize lockout handler (blocks locked-out IPs).
+		LSM_Lockout::init();
 	}
 
 	/**
