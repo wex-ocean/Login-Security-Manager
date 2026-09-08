@@ -51,7 +51,7 @@ $blacklist = LSM_IP_List::get_rules( 'blacklist' );
 		<table class="form-table" role="presentation">
 			<tr>
 				<th scope="row"><label for="lsm_ip_rule"><?php esc_html_e( 'IP address or CIDR range', 'login-security-manager' ); ?></label></th>
-				<td><input name="lsm_ip_rule" id="lsm_ip_rule" type="text" class="regular-text" placeholder="192.168.1.0/24" required /></td>
+				<td><input name="lsm_ip_rule" id="lsm_ip_rule" type="text" class="regular-text" placeholder="<?php esc_attr_e( 'e.g., 192.168.1.0/24', 'login-security-manager' ); ?>" required /></td>
 			</tr>
 			<tr>
 				<th scope="row"><label for="lsm_ip_rule_type"><?php esc_html_e( 'Rule type', 'login-security-manager' ); ?></label></th>
