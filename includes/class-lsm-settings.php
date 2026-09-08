@@ -111,6 +111,23 @@ class LSM_Settings {
 			'lsm_settings_page',
 			'lsm_admin_section'
 		);
+
+		// Add session management section.
+		add_settings_section(
+			'lsm_session_section',
+			esc_html__( 'Session Management', 'login-security-manager' ),
+			array( __CLASS__, 'render_session_section' ),
+			'lsm_settings_page'
+		);
+
+		// Add maximum concurrent sessions field.
+		add_settings_field(
+			'lsm_max_sessions',
+			esc_html__( 'Max Concurrent Sessions', 'login-security-manager' ),
+			array( __CLASS__, 'render_max_sessions_field' ),
+			'lsm_settings_page',
+			'lsm_session_section'
+		);
 	}
 
 	/**
@@ -138,6 +155,15 @@ class LSM_Settings {
 	 */
 	public static function render_admin_section() {
 		echo '<p>' . esc_html__( 'Prevent admins from being locked out during attacks.', 'login-security-manager' ) . '</p>';
+	}
+
+	/**
+	 * Render session section description.
+	 *
+	 * @return void
+	 */
+	public static function render_session_section() {
+		echo '<p>' . esc_html__( 'Review active login sessions and optionally limit how many sessions each user may have.', 'login-security-manager' ) . '</p>';
 	}
 
 	/**
@@ -215,6 +241,20 @@ class LSM_Settings {
 	}
 
 	/**
+	 * Render maximum concurrent sessions field.
+	 *
+	 * @return void
+	 */
+	public static function render_max_sessions_field() {
+		$settings = get_option( 'lsm_settings', array() );
+		$value    = isset( $settings['max_sessions'] ) ? (int) $settings['max_sessions'] : 0;
+		?>
+		<input type="number" name="lsm_settings[max_sessions]" value="<?php echo esc_attr( $value ); ?>" min="0" max="100" />
+		<p class="description"><?php esc_html_e( 'Maximum active sessions per user. Use 0 for unlimited. Default: unlimited.', 'login-security-manager' ); ?></p>
+		<?php
+	}
+
+	/**
 	 * Sanitize and validate settings.
 	 *
 	 * @param array $input The raw settings input.
@@ -268,6 +308,14 @@ class LSM_Settings {
 			}
 		} else {
 			$output['admin_bypass_ip'] = '';
+		}
+
+		// Sanitize maximum concurrent sessions.
+		if ( isset( $input['max_sessions'] ) ) {
+			$max_sessions = (int) $input['max_sessions'];
+			if ( $max_sessions >= 0 && $max_sessions <= 100 ) {
+				$output['max_sessions'] = $max_sessions;
+			}
 		}
 
 		return $output;

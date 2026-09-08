@@ -64,6 +64,7 @@ class LSM_Core {
 	 * Includes the following files:
 	 * - IP utilities for visitor IP detection
 	 * - Manual IP whitelist and blacklist rules
+	 * - Active session management
 	 * - Login guard for failed attempt tracking
 	 * - Lockout handler for IP blocking
 	 * - Username enumeration protection
@@ -77,6 +78,7 @@ class LSM_Core {
 	private function load_dependencies() {
 		require_once LSM_PLUGIN_DIR . 'includes/class-lsm-ip-utils.php';
 		require_once LSM_PLUGIN_DIR . 'includes/class-lsm-ip-list.php';
+		require_once LSM_PLUGIN_DIR . 'includes/class-lsm-session-manager.php';
 		require_once LSM_PLUGIN_DIR . 'includes/class-lsm-enumeration-guard.php';
 		require_once LSM_PLUGIN_DIR . 'includes/class-lsm-login-guard.php';
 		require_once LSM_PLUGIN_DIR . 'includes/class-lsm-lockout.php';
@@ -104,6 +106,9 @@ class LSM_Core {
 
 		// Initialize manual IP rules before authentication and attempt tracking.
 		LSM_IP_List::init();
+
+		// Initialize active session management.
+		LSM_Session_Manager::init();
 
 		// Initialize username enumeration protection.
 		LSM_Enumeration_Guard::init();
