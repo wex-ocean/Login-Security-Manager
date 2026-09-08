@@ -91,6 +91,8 @@ class LSM_Activator {
 				'behind_proxy'       => false,
 				'trusted_proxy_ips'  => array(),
 				'admin_bypass_ip'    => '',
+				'whitelist'          => array(),
+				'blacklist'          => array(),
 				'enable_enumeration_guard' => true,
 				'max_sessions'       => 0, // 0 = unlimited
 			);

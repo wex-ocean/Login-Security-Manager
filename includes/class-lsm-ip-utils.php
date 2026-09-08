@@ -134,13 +134,13 @@ class LSM_IP_Utils {
 	 * @return bool True if valid, false otherwise.
 	 */
 	public static function is_valid_cidr( $cidr ) {
-		if ( ! is_string( $cidr ) || false === strpos( $cidr, '/' ) ) {
+		if ( ! is_string( $cidr ) || 1 !== substr_count( $cidr, '/' ) ) {
 			return false;
 		}
 
 		list( $ip, $prefix ) = explode( '/', $cidr );
 
-		if ( ! self::is_valid_ip( $ip ) ) {
+		if ( ! self::is_valid_ip( $ip ) || '' === $prefix || ! ctype_digit( $prefix ) ) {
 			return false;
 		}
 
@@ -167,11 +167,22 @@ class LSM_IP_Utils {
 		}
 
 		list( $subnet, $bits ) = explode( '/', $cidr );
-		$ip                     = inet_pton( $ip );
-		$subnet                 = inet_pton( $subnet );
-		$mask                   = inet_pton( (string) long2ip( -1 << ( 32 - (int) $bits ) ) );
-		$ipmasked               = $ip & $mask;
-		$subnetmasked           = $subnet & $mask;
+		$ip       = inet_pton( $ip );
+		$subnet   = inet_pton( $subnet );
+		if ( false === $ip || false === $subnet || strlen( $ip ) !== strlen( $subnet ) ) {
+			return false;
+		}
+
+		$bytes    = strlen( $ip );
+		$full_bytes = (int) floor( (int) $bits / 8 );
+		$remaining  = (int) $bits % 8;
+		$mask       = str_repeat( "\xff", $full_bytes );
+		if ( $remaining > 0 ) {
+			$mask .= chr( 0xff << ( 8 - $remaining ) );
+		}
+		$mask         = str_pad( $mask, $bytes, "\0" );
+		$ipmasked     = $ip & $mask;
+		$subnetmasked = $subnet & $mask;
 
 		return $ipmasked === $subnetmasked;
 	}

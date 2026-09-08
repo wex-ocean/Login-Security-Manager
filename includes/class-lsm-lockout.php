@@ -41,7 +41,7 @@ class LSM_Lockout {
 		$ip = LSM_IP_Utils::get_visitor_ip();
 
 		// Check if this IP is whitelisted for admin bypass.
-		if ( self::is_admin_bypass_ip( $ip ) ) {
+		if ( LSM_IP_List::is_whitelisted( $ip ) ) {
 			return $user;
 		}
 

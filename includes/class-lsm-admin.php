@@ -74,6 +74,16 @@ class LSM_Admin {
 			array( __CLASS__, 'render_blocked_ips_page' )
 		);
 
+		// Add manual IP rules submenu.
+		add_submenu_page(
+			'lsm_dashboard',
+			esc_html__( 'Manual IP Rules', 'login-security-manager' ),
+			esc_html__( 'IP Rules', 'login-security-manager' ),
+			'manage_options',
+			'lsm_ip_rules',
+			array( __CLASS__, 'render_ip_rules_page' )
+		);
+
 		// Add Settings submenu (moved under Login Security).
 		add_submenu_page(
 			'lsm_dashboard',
@@ -131,6 +141,19 @@ class LSM_Admin {
 	}
 
 	/**
+	 * Render the manual IP rules page.
+	 *
+	 * @return void
+	 */
+	public static function render_ip_rules_page() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You do not have permission to access this page.', 'login-security-manager' ) );
+		}
+
+		require_once LSM_PLUGIN_DIR . 'admin/views/ip-rules.php';
+	}
+
+	/**
 	 * Enqueue admin CSS and JavaScript.
 	 *
 	 * @param string $hook_suffix The current admin page hook.
@@ -142,6 +165,7 @@ class LSM_Admin {
 			'toplevel_page_lsm_dashboard',
 			'login-security_page_lsm_logs',
 			'login-security_page_lsm_blocked_ips',
+			'login-security_page_lsm_ip_rules',
 			'login-security_page_lsm_settings_page',
 		);
 

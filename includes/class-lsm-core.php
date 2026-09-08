@@ -50,6 +50,11 @@ class LSM_Core {
 	public function __construct() {
 		$this->plugin_name = LSM_PLUGIN_SLUG;
 		$this->version     = LSM_PLUGIN_VERSION;
+
+		if ( defined( 'LSM_DISABLE' ) && LSM_DISABLE ) {
+			return;
+		}
+
 		$this->load_dependencies();
 	}
 
@@ -58,8 +63,10 @@ class LSM_Core {
 	 *
 	 * Includes the following files:
 	 * - IP utilities for visitor IP detection
+	 * - Manual IP whitelist and blacklist rules
 	 * - Login guard for failed attempt tracking
 	 * - Lockout handler for IP blocking
+	 * - Username enumeration protection
 	 * - Error messages for generic login errors
 	 * - Settings registration and sanitization
 	 * - Logger with query helpers for stats
@@ -69,6 +76,8 @@ class LSM_Core {
 	 */
 	private function load_dependencies() {
 		require_once LSM_PLUGIN_DIR . 'includes/class-lsm-ip-utils.php';
+		require_once LSM_PLUGIN_DIR . 'includes/class-lsm-ip-list.php';
+		require_once LSM_PLUGIN_DIR . 'includes/class-lsm-enumeration-guard.php';
 		require_once LSM_PLUGIN_DIR . 'includes/class-lsm-login-guard.php';
 		require_once LSM_PLUGIN_DIR . 'includes/class-lsm-lockout.php';
 		require_once LSM_PLUGIN_DIR . 'includes/class-lsm-error-messages.php';
@@ -83,11 +92,21 @@ class LSM_Core {
 	 * @return void
 	 */
 	public function run() {
+		if ( defined( 'LSM_DISABLE' ) && LSM_DISABLE ) {
+			return;
+		}
+
 		// Initialize settings registration (must be before other inits).
 		LSM_Settings::init();
 
 		// Initialize generic error messages.
 		LSM_Error_Messages::init();
+
+		// Initialize manual IP rules before authentication and attempt tracking.
+		LSM_IP_List::init();
+
+		// Initialize username enumeration protection.
+		LSM_Enumeration_Guard::init();
 
 		// Initialize login guard (tracks failed attempts).
 		LSM_Login_Guard::init();

@@ -40,7 +40,7 @@ class LSM_Login_Guard {
 		$user_agent = isset( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ) : '';
 
 		// Check if this IP is whitelisted for admin bypass.
-		if ( self::is_admin_bypass_ip( $ip ) ) {
+		if ( LSM_IP_List::is_whitelisted( $ip ) ) {
 			return;
 		}
 
